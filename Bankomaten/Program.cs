@@ -145,7 +145,7 @@ namespace Bankomat
         }
         static void ShowAccount()
         {
-
+            Console.WriteLine("");
         }
     }
 }
