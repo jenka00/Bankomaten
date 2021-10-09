@@ -1,0 +1,14 @@
+C:\Users\jenka\source\repos\Bankomaten\Bankomaten\obj\Debug\netcoreapp3.1\Bankomaten.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jenka\source\repos\Bankomaten\Bankomaten\obj\Debug\netcoreapp3.1\Bankomaten.AssemblyInfoInputs.cache
+C:\Users\jenka\source\repos\Bankomaten\Bankomaten\obj\Debug\netcoreapp3.1\Bankomaten.AssemblyInfo.cs
+C:\Users\jenka\source\repos\Bankomaten\Bankomaten\obj\Debug\netcoreapp3.1\Bankomaten.csproj.CoreCompileInputs.cache
+C:\Users\jenka\source\repos\Bankomaten\Bankomaten\bin\Debug\netcoreapp3.1\Bankomaten.exe
+C:\Users\jenka\source\repos\Bankomaten\Bankomaten\bin\Debug\netcoreapp3.1\Bankomaten.deps.json
+C:\Users\jenka\source\repos\Bankomaten\Bankomaten\bin\Debug\netcoreapp3.1\Bankomaten.runtimeconfig.json
+C:\Users\jenka\source\repos\Bankomaten\Bankomaten\bin\Debug\netcoreapp3.1\Bankomaten.runtimeconfig.dev.json
+C:\Users\jenka\source\repos\Bankomaten\Bankomaten\bin\Debug\netcoreapp3.1\Bankomaten.dll
+C:\Users\jenka\source\repos\Bankomaten\Bankomaten\bin\Debug\netcoreapp3.1\Bankomaten.pdb
+C:\Users\jenka\source\repos\Bankomaten\Bankomaten\obj\Debug\netcoreapp3.1\Bankomaten.dll
+C:\Users\jenka\source\repos\Bankomaten\Bankomaten\obj\Debug\netcoreapp3.1\Bankomaten.pdb
+C:\Users\jenka\source\repos\Bankomaten\Bankomaten\obj\Debug\netcoreapp3.1\Bankomaten.genruntimeconfig.cache
+C:\Users\jenka\source\repos\Bankomaten\Bankomaten\obj\Debug\netcoreapp3.1\Bankomaten.csproj.AssemblyReference.cache
