@@ -8,6 +8,8 @@ namespace Bankomat
     {
         static void Main(string[] args)
         {
+            int i = 0;
+
             string[,] users = new string[5, 5];
 
             //Användare 1
@@ -43,8 +45,12 @@ namespace Bankomat
             Console.WriteLine("Skriv ditt användarnamn");
             string userName = Console.ReadLine().ToUpper();
 
-            //Console.WriteLine("Skriv ditt lösenord");
-            //string password = Console.ReadLine();
+            while (userName != users[i, 0].ToUpper())
+            {
+                Console.Clear();
+                Console.WriteLine("Okänd användare. Försök igen.");
+                userName = Console.ReadLine().ToUpper();
+            }
 
             if (LogIn(users, userName))
 
@@ -57,9 +63,41 @@ namespace Bankomat
                 Environment.Exit(0); //Stänger ner programmet
             }
 
-            Menu();
+           bool loop = true;
+            int menuChoice = 0;
+            do
+            {
+                Console.WriteLine("\n\t\tVad vill du göra?" +
+                                   "\n\n\n\t\t1. Se dina konton och saldo" +
+                                   "\n\t\t2. Överföring mellan konton" +
+                                   "\n\t\t3. Ta ut pengar" +
+                                   "\n\t\t4. Logga ut");
+                try
+                {
+                    menuChoice = Int32.Parse(Console.ReadLine());
+                }
+                catch
+                {
+                    Console.WriteLine("Fel! Du måste ange ett nummer.");
+                }
 
-            ShowAccount();
+                switch (menuChoice)
+                {
+                    case 1:
+                        ShowAccount(users, userName);
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        loop = false;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            while (loop);
         }
 
         static bool LogIn(string[,] users, string userName)
@@ -89,8 +127,7 @@ namespace Bankomat
                         {
                             Console.WriteLine("Fel lösenord.");
                             
-                            break;
-                            
+                            break;    
                         }
                     }                  
                 }
@@ -105,47 +142,11 @@ namespace Bankomat
                 return false;
             }
         }
-        static void Menu()
+        
+        static void ShowAccount(string[,] users, string userName)
         {
-            bool loop = true;
-            int menuChoice = 0;
-            do
-            {
-                Console.WriteLine("\n\t\tVad vill du göra?" +
-                                   "\n\n\n\t\t1. Se dina konton och saldo" +
-                                   "\n\t\t2. Överföring mellan konton" +
-                                   "\n\t\t3. Ta ut pengar" +
-                                   "\n\t\t4. Logga ut");
-                try
-                {
-                    menuChoice = Int32.Parse(Console.ReadLine());
-                }
-                catch
-                {
-                    Console.WriteLine("Fel! Du måste ange ett nummer.");
-                }
-
-                switch (menuChoice)
-                {
-                    case 1:
-                        ShowAccount();
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
-                    case 4:
-                        loop = false;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            while (loop);
-        }
-        static void ShowAccount()
-        {
-            Console.WriteLine("");
+            
+            Console.WriteLine("Tillgängliga konton;");
         }
     }
 }
