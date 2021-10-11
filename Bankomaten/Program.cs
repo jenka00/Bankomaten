@@ -71,17 +71,16 @@ namespace Bankomat
 
             int userNumber = FindUserNumber(users, userName);
 
-            decimal transferAmount = 0;
-            decimal newSumAccount1 = 0;
-            decimal newSumAccount2 = 0;
             decimal sumAccount1 = Convert.ToDecimal(users[userNumber, 3]);
             decimal sumAccount2 = Convert.ToDecimal(users[userNumber, 5]);
 
             bool loop = true;
             int menuChoice = 0;
-
+            
             do
             {
+                Console.Clear();
+
                 Console.WriteLine("\n\t\tVad vill du göra?" +
                                    "\n\n\n\t\t1. Se dina konton och saldo" +
                                    "\n\t\t2. Överföring mellan konton" +
@@ -89,7 +88,7 @@ namespace Bankomat
                                    "\n\t\t4. Logga ut");
                 try
                 {
-                    menuChoice = Int32.Parse(Console.ReadLine());
+                   menuChoice = Int32.Parse(Console.ReadLine());
                 }
                 catch
                 {
@@ -97,10 +96,13 @@ namespace Bankomat
                     continue;
                 }
 
+                Console.Clear();
+
                 switch (menuChoice)
                 {
                     case 1:
                         ShowAccount(users, userNumber, sumAccount1, sumAccount2);
+                        GoToMenu();
                         break;
 
                     case 2:
@@ -111,70 +113,28 @@ namespace Bankomat
                                           "\n{2}: {3} kr", 
                                           users[userNumber, 2], sumAccount1, 
                                           users[userNumber, 4], sumAccount2);
+                        GoToMenu();
                         break;
 
                     case 3:
-                       bool isRunning = true;
+                        MoneyWithdrawal(users, userNumber, ref sumAccount1, ref sumAccount2);
+                       
+                        Console.WriteLine("Tillgänglig summa efter överföring: " +
+                                            "\n{0}: {1} kr " +
+                                            "\n{2}: {3} kr", 
+                                            users[userNumber, 2], sumAccount1, 
+                                            users[userNumber, 4], sumAccount2);
 
-                        Console.WriteLine("Välj konto att ta ut pengar ifrån genom att ange siffra 1 eller 2: " +
-                            "\n1. {0}: {1}kr \n2. {2}: {3}kr",
-                            users[userNumber, 2], sumAccount1,
-                            users[userNumber, 4], sumAccount2);
-
-                        Int32.TryParse(Console.ReadLine(), out int chosenAccount);
-                        while (isRunning)
-                        {
-                            if (chosenAccount == 1)
-                            {
-                                Console.WriteLine("Tillgänglig summa {0}: {1} kr", users[userNumber, 2], sumAccount1);
-                                Console.WriteLine("Vilken summa vill du ta ut?");
-                                transferAmount = Convert.ToDecimal(Console.ReadLine());
-
-                                if (sumAccount1 >= transferAmount)
-                                {
-                                    newSumAccount1 = sumAccount1 - transferAmount;
-                                    newSumAccount2 = sumAccount2;
-                                    isRunning = false;
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Du har inte tillräckligt med pengar på kontot. Välj en lägre summa.");
-                                }
-                            }
-                            else if (chosenAccount == 2)
-                            {
-                                Console.WriteLine("Tillgänglig summa {0}: {1} kr", users[userNumber, 4], sumAccount2);
-                                Console.WriteLine("Vilken summa vill du ta ut?");
-                                transferAmount = Convert.ToDecimal(Console.ReadLine());
-
-                                if (sumAccount2 >= transferAmount)
-                                {
-                                    newSumAccount2 = sumAccount2 - transferAmount;
-                                    newSumAccount1 = sumAccount1;
-                                    isRunning = false;
-                                }
-                                else
-                                {
-                                    Console.WriteLine("Du har inte tillräckligt med pengar på kontot. Välj en lägre summa.");
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine("Ogiltigt val.");
-                            }
-                        }
-                        Console.Clear();
-                        sumAccount1 = newSumAccount1;
-                        sumAccount2 = newSumAccount2;
-
-                        Console.WriteLine("Tillgänglig summa efter överföring: \n{0}: {1} kr \n{2}: {3} kr", users[userNumber, 2], sumAccount1, users[userNumber, 4], sumAccount2);
-
-                        transferAmount = 0;
+                        GoToMenu();
                         break;
+
                     case 4:
                         loop = false;
                         break;
+
                     default:
+                        Console.WriteLine("Ogiltigt val.");
+                        GoToMenu();
                         break;
                 }
             }
@@ -237,23 +197,25 @@ namespace Bankomat
             }
             return userNumber;
         }
+        static void GoToMenu()
+        {
+            Console.WriteLine("\n\tTryck enter för att komma till huvudmenyn.");
+            Console.ReadLine();
+        }
 
         static void ShowAccount(string[,] users, int userNumber, decimal sumAccount1, decimal sumAccount2)
         {
-
             Console.WriteLine("Tillgängliga konton: \n{0}: {1}kr " +
                                 "\n{2}: {3}kr",
                                 users[userNumber, 2], sumAccount1,
                                 users[userNumber, 4], sumAccount2);
-            Console.ReadLine();
         }
-
+        
         static void MoneyTransfer(string[,] users, int userNumber, ref decimal sumAccount1, ref decimal sumAccount2)
         {
             bool isRunning = true;
             decimal transferAmount = 0;
-            decimal[] newSum= new decimal[2];
-            
+                       
             Console.WriteLine("Välj konto att föra över pengar ifrån genom att ange siffra 1 eller 2: " +
                 "\n1. {0}: {1}kr " +
                 "\n2. {2}: {3}kr",
@@ -261,6 +223,9 @@ namespace Bankomat
                 users[userNumber, 4], users[userNumber, 5]);
 
             Int32.TryParse(Console.ReadLine(), out int chosenAccount);
+
+            Console.Clear();
+
             while (isRunning)
             {
                 if (chosenAccount == 1)
@@ -268,6 +233,8 @@ namespace Bankomat
                     Console.WriteLine(users[userNumber, 2], ": ", sumAccount1);
                     Console.WriteLine("Vilken summa vill du föra över?");
                     transferAmount = Convert.ToDecimal(Console.ReadLine());
+
+                    Console.Clear();
 
                     sumAccount1 = sumAccount1 - transferAmount;
                     sumAccount2 = sumAccount2 + transferAmount;
@@ -279,6 +246,8 @@ namespace Bankomat
                     Console.WriteLine("Vilken summa vill du föra över?");
                     transferAmount = Convert.ToDecimal(Console.ReadLine());
 
+                    Console.Clear();
+
                     sumAccount1 = sumAccount2 - transferAmount;
                     sumAccount2 = sumAccount1 + transferAmount;
                     isRunning = false;
@@ -286,9 +255,65 @@ namespace Bankomat
                 else
                 {
                     Console.WriteLine("Ogiltigt val.");
+                    break;
+                }
+            }           
+        }
+        static void MoneyWithdrawal(string[,] users, int userNumber, ref decimal sumAccount1, ref decimal sumAccount2)
+        {
+            bool isRunning = true;
+
+            Console.WriteLine("Välj konto att ta ut pengar ifrån genom att ange siffra 1 eller 2: " +
+                "\n1. {0}: {1}kr \n2. {2}: {3}kr",
+                users[userNumber, 2], sumAccount1,
+                users[userNumber, 4], sumAccount2);
+
+            Int32.TryParse(Console.ReadLine(), out int chosenAccount);
+
+            Console.Clear();
+
+            while (isRunning)
+            {
+                if (chosenAccount == 1)
+                {
+                    Console.WriteLine("Tillgänglig summa {0}: {1} kr", users[userNumber, 2], sumAccount1);
+                    Console.WriteLine("Vilken summa vill du ta ut?");
+                    decimal transferAmount = Convert.ToDecimal(Console.ReadLine());
+
+                    if (sumAccount1 >= transferAmount)
+                    {
+                        sumAccount1 = sumAccount1 - transferAmount;
+                       
+                        isRunning = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Du har inte tillräckligt med pengar på kontot. Välj en lägre summa.");
+                    }
+                }
+                else if (chosenAccount == 2)
+                {
+                    Console.WriteLine("Tillgänglig summa {0}: {1} kr", users[userNumber, 4], sumAccount2);
+                    Console.WriteLine("Vilken summa vill du ta ut?");
+                    decimal transferAmount = Convert.ToDecimal(Console.ReadLine());
+
+                    if (sumAccount2 >= transferAmount)
+                    {
+                        sumAccount2 = sumAccount2 - transferAmount;
+                        
+                        isRunning = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Du har inte tillräckligt med pengar på kontot. Välj en lägre summa.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Ogiltigt val.");
                 }
             }
-            
+            Console.Clear();
         }
     }
 }
