@@ -57,98 +57,153 @@ namespace Bankomat
 
                 Console.WriteLine("\n\n\t\tVÄLKOMMEN TILL BANKEN ");
 
-                Console.WriteLine("\n\n\t\tSkriv ditt användarnamn");
-
-                string userName = Console.ReadLine().ToUpper();
-
-                if (LogIn(users, userName))
-
+                bool validUser = true;
+                while (validUser)
                 {
-                    Console.WriteLine("\n\n\t\tVälkommen {0}. Du loggas in.", userName);
-                    System.Threading.Thread.Sleep(1000);
-                    Console.Clear();
+                    Console.WriteLine("\n\n\t\tSkriv ditt användarnamn");
+
+                    string userName = Console.ReadLine().ToUpper();
+
+                    if (CheckValidUser(users, userName))
+                    {
+                        validUser = true;
+                    }
+
+                    else
+                    {
+                        Console.WriteLine("\n\n\t\tOkänd användare.");
+                        validUser = false;
+                        System.Threading.Thread.Sleep(1000);
+                        Console.Clear();
+                        break;
+                    }
+
+                    if (LogIn(users, userName))
+
+                    {
+                        Console.WriteLine("\n\n\t\tVälkommen {0}. Du loggas in.", userName);
+                        System.Threading.Thread.Sleep(1000);
+                        Console.Clear();
+                    }
+                    else
+                    {
+                        Console.WriteLine("\n\n\t\tDu har angett fel lösenord 3 gånger. " +
+                                          "\n\n\t\tProgrammet stängs ner. Välkommen åter.");
+
+                        Environment.Exit(0); //Stänger ner programmet
+                    }
+
+                    int userNumber = FindUserNumber(users, userName);
+
+                    decimal sumAccount1 = Convert.ToDecimal(users[userNumber, 3]);
+                    decimal sumAccount2 = Convert.ToDecimal(users[userNumber, 5]);
+
+                    bool runMenu = true;
+                    int menuChoice = 0;
+
+                    do
+                    {
+                        Console.Clear();
+
+                        Console.WriteLine("\n\n\t\tVad vill du göra?" +
+                                           "\n\n\t\t1. Se dina konton och saldo" +
+                                           "\n\n\t\t2. Överföring mellan konton" +
+                                           "\n\n\t\t3. Ta ut pengar" +
+                                           "\n\n\t\t4. Logga ut");
+                        try
+                        {
+                            menuChoice = Int32.Parse(Console.ReadLine());
+                        }
+                        catch
+                        {
+                            Console.WriteLine("\n\n\t\tFel! Du måste ange ett nummer.");
+                            continue;
+                        }
+
+                        Console.Clear();
+
+                        switch (menuChoice)
+                        {
+                            case 1:
+                                ShowAccount(users, userNumber, sumAccount1, sumAccount2);
+
+                                GoToMenu();
+
+                                break;
+
+                            case 2:
+                                MoneyTransfer(users, userNumber, ref sumAccount1, ref sumAccount2);
+
+                                Console.WriteLine("\n\n\t\t{0}: {1} kr " +
+                                                  "\n\n\t\t{2}: {3} kr",
+                                                  users[userNumber, 2], sumAccount1,
+                                                  users[userNumber, 4], sumAccount2);
+
+                                GoToMenu();
+
+                                break;
+
+                            case 3:
+                                MoneyWithdrawal(users, userNumber, ref sumAccount1, ref sumAccount2);
+
+                                Console.WriteLine("\n\n\t\t{0}: {1} kr " +
+                                                    "\n\n\t\t{2}: {3} kr",
+                                                    users[userNumber, 2], sumAccount1,
+                                                    users[userNumber, 4], sumAccount2);
+
+                                GoToMenu();
+
+                                break;
+
+                            case 4:
+                                runMenu = false;
+
+                                Console.WriteLine("\n\n\t\tDu loggas ut.");
+                                System.Threading.Thread.Sleep(1000);
+
+                                Console.Clear();
+                                break; ;
+
+                            default:
+                                Console.WriteLine("\n\n\t\tOgiltigt val.");
+
+                                GoToMenu();
+
+                                break;
+                        }
+                    }
+                    while (runMenu);
+                }
+                while (validUser) ;
+            }
+            while (runProgram);
+        }
+        static bool CheckValidUser(string[,] users, string userName)
+        {
+            bool isValid = false;
+            int i = 0;
+            int numberOfUsers = users.GetLength(0);
+
+            while (i < numberOfUsers)
+            {
+                if (users[i, 0] == userName)
+                {
+                    isValid = true;
+                    break;
                 }
                 else
                 {
-                    Console.WriteLine("\n\n\t\tDu har angett fel lösenord 3 gånger. " +
-                                      "\n\t\tProgrammet stängs ner. Välkommen åter.");
-
-                    Environment.Exit(0); //Stänger ner programmet
+                    i++;
                 }
-
-                int userNumber = FindUserNumber(users, userName);
-
-                decimal sumAccount1 = Convert.ToDecimal(users[userNumber, 3]);
-                decimal sumAccount2 = Convert.ToDecimal(users[userNumber, 5]);
-
-                bool runMenu = true;
-                int menuChoice = 0;
-
-                do
-                {
-                    Console.Clear();
-
-                    Console.WriteLine("\n\n\t\tVad vill du göra?" +
-                                       "\n\n\t\t1. Se dina konton och saldo" +
-                                       "\n\n\t\t2. Överföring mellan konton" +
-                                       "\n\n\t\t3. Ta ut pengar" +
-                                       "\n\n\t\t4. Logga ut");
-                    try
-                    {
-                        menuChoice = Int32.Parse(Console.ReadLine());
-                    }
-                    catch
-                    {
-                        Console.WriteLine("\n\n\t\tFel! Du måste ange ett nummer.");
-                        continue;
-                    }
-
-                    Console.Clear();
-
-                    switch (menuChoice)
-                    {
-                        case 1:
-                            ShowAccount(users, userNumber, sumAccount1, sumAccount2);
-                            GoToMenu();
-                            break;
-
-                        case 2:
-                            MoneyTransfer(users, userNumber, ref sumAccount1, ref sumAccount2);
-
-                            Console.WriteLine("\n\n\t\t{0}: {1} kr " +
-                                              "\n\n\t\t{2}: {3} kr",
-                                              users[userNumber, 2], sumAccount1,
-                                              users[userNumber, 4], sumAccount2);
-                            GoToMenu();
-                            break;
-
-                        case 3:
-                            MoneyWithdrawal(users, userNumber, ref sumAccount1, ref sumAccount2);
-
-                            Console.WriteLine("\n\n\t\t{0}: {1} kr " +
-                                                "\n\n\t\t{2}: {3} kr",
-                                                users[userNumber, 2], sumAccount1,
-                                                users[userNumber, 4], sumAccount2);
-
-                            GoToMenu();
-                            break;
-
-                        case 4:
-                            runMenu = false;
-                            Console.WriteLine("\n\n\t\tDu loggas ut.");
-                            System.Threading.Thread.Sleep(1000);
-                            Console.Clear();
-                            break; ;
-
-                        default:
-                            Console.WriteLine("\n\n\t\tOgiltigt val.");
-                            GoToMenu();
-                            break;
-                    }
-                }
-                while (runMenu);
             }
-            while (runProgram);
+            if (isValid == true)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         static bool LogIn(string[,] users, string userName)
@@ -161,8 +216,9 @@ namespace Bankomat
                 Console.WriteLine("\n\t\tSkriv ditt lösenord");
 
                 string password = Console.ReadLine();
-
+                
                 Console.Clear();
+
                 for (int i = 0; i < users.GetLength(0); i++)
                 {
                     if (users[i, 1] == password)
@@ -173,12 +229,11 @@ namespace Bankomat
                             tryPass = 3;
                             break;
                         }
-                        else
-                        {
-                            Console.WriteLine("\n\n\t\tFel lösenord.");
-
-                            break;
-                        }
+                    }                    
+                    else
+                    {
+                        Console.WriteLine("\n\n\t\tFel lösenord.");
+                        break;
                     }
                 }
                 tryPass++;
@@ -206,6 +261,7 @@ namespace Bankomat
             }
             return userNumber;
         }
+
         static void GoToMenu()
         {
             Console.WriteLine("\n\n\t\tTryck enter för att komma till huvudmenyn.");
@@ -341,7 +397,7 @@ namespace Bankomat
                         }
                     }
                 }
-               
+
                 else
                 {
                     Console.WriteLine("\n\n\t\tOgiltigt val.");
@@ -349,6 +405,7 @@ namespace Bankomat
                 }
             }
         }
+        
         static void MoneyWithdrawal(string[,] users, int userNumber, ref decimal sumAccount1, ref decimal sumAccount2)
         {
             bool isRunning = true;
@@ -412,8 +469,8 @@ namespace Bankomat
                                 else
                                 {
                                     Console.WriteLine("\n\n\t\tFel kod.");
-                                    break;
                                     isRunning = false;
+                                    break;                                    
                                 }
                             }
                             else
@@ -423,7 +480,7 @@ namespace Bankomat
                             }
                         }
                         catch
-                        {   
+                        {
                             Console.Clear();
 
                             Console.WriteLine("\n\n\t\tAnge summan i siffror.");
@@ -473,7 +530,7 @@ namespace Bankomat
                                     break;
                                 }
                             }
-                        
+
                             else
                             {
                                 Console.WriteLine("\n\n\t\tDu har inte tillräckligt med pengar på kontot. Välj en lägre summa.");
