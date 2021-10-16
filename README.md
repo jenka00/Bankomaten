@@ -1,5 +1,5 @@
 # Bankomaten
-This program works as a ATM machine for 5 users. If the user succeeds to log in, it's pre set accounts with pre set amounts are shown. 
+This program works as a ATM machine for 5 users. If the user succeeds to log in, it's pre set accounts with pre set values are shown. 
 If the user writes the wrong password 3 times, the program is terminated.
 When the user is logged in, it can chose to transfer money between it's own accounts, make a cash withdrawal or sign out.
 
